@@ -7,6 +7,7 @@ jobs:
     environment:
       - GOCACHE: "/tmp/go/cache"
       - DEP_VERSION: 0.4.1
+      - CGO_ENABLED=0 
     steps:
       - checkout
       - run:
