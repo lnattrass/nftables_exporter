@@ -1,5 +1,22 @@
 version: 2
 jobs:
+  build_static:
+    working_directory: /go/src/github.com/Sheridan/nftables_exporter
+    docker:
+      - image: circleci/golang:1.10.0
+    environment:
+      - GOCACHE: "/tmp/go/cache"
+      - DEP_VERSION: 0.4.1
+      - CGO_ENABLED: 0 
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: make build
+      - store_artifacts:
+          path: bin/nftables_exporter
+          destination: nftables_exporter.static
+    
   build:
     working_directory: /go/src/github.com/Sheridan/nftables_exporter
     docker:
@@ -7,7 +24,6 @@ jobs:
     environment:
       - GOCACHE: "/tmp/go/cache"
       - DEP_VERSION: 0.4.1
-      - CGO_ENABLED=0 
     steps:
       - checkout
       - run:
