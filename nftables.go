@@ -90,15 +90,20 @@ func (nft NFTables) mineRule(value gjson.Result) {
 			right := match.Get("right")
 			if left.Exists() && right.Exists() {
 				// fmt.Printf("[left] %s, [right] %s\n", left, right)
-				meta := left.Get("meta")
-				if meta.Exists() {
-					switch meta.String() {
+
+				if left.Get("meta").Exists() {
+					var key string
+					if left.Get("meta.key").Exists() {
+						key = "meta.key"
+					} else {
+						key = "meta"
+					}
+					switch left.Get(key).String() {
 					case "iif", "iifname":
 						rule.Interfaces.Input = append(rule.Interfaces.Input, right.String())
 					case "oif", "oifname":
 						rule.Interfaces.Output = append(rule.Interfaces.Output, right.String())
 					}
-					continue
 				}
 				payload := left.Get("payload")
 				if payload.Exists() {
